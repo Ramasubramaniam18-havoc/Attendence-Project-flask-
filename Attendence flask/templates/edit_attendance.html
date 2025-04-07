@@ -1,0 +1,83 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Attendance for {{ student.name }}</h1>
+        <a href="/student/{{ student_id }}" class="btn btn-secondary">Back to Student</a>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Late">Late</option>
+                            <option value="Excused">Excused</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="course_id" class="form-label">Course (Optional)</label>
+                        <select class="form-select" id="course_id" name="course_id">
+                            <option value="">All Courses</option>
+                            {% for course_id, course in courses.items() %}
+                                {% if course_id in student.courses %}
+                                    <option value="{{ course_id }}">{{ course.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Update Attendance</button>
+                </div>
+            </form>
+            
+            <hr>
+            
+            <h5 class="mt-4">Current Attendance Records</h5>
+            {% if attendance %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for date_key, status in attendance.items() %}
+                                <tr>
+                                    {% if '_' in date_key %}
+                                        {% set date, course_id = date_key.split('_') %}
+                                        <td>{{ date }}</td>
+                                        <td>{{ courses[course_id].name if course_id in courses else 'Unknown' }}</td>
+                                    {% else %}
+                                        <td>{{ date_key }}</td>
+                                        <td>All</td>
+                                    {% endif %}
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if status == 'Present' else 'danger' if status == 'Absent' else 'warning' if status == 'Late' else 'secondary' }}">
+                                            {{ status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No attendance records found</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+        

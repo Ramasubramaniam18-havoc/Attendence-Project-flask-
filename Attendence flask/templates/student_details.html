@@ -1,0 +1,91 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Student Details: {{ student.name }}</h1>
+        <a href="/students" class="btn btn-secondary">Back to Students</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Student Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>ID:</strong> {{ student_id }}</p>
+                    <p><strong>Name:</strong> {{ student.name }}</p>
+                    <p><strong>Email:</strong> {{ student.email if student.email else 'Not provided' }}</p>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Enrolled Courses</h5>
+                    <a href="/enroll" class="btn btn-sm btn-primary">Enroll</a>
+                </div>
+                <div class="card-body">
+                    {% if enrolled_courses %}
+                        <ul class="list-group">
+                            {% for course in enrolled_courses %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ course.name }}
+                                    <a href="/unenroll/{{ student_id }}/{{ course.id }}" class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('Are you sure you want to unenroll this student?')">Unenroll</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Not enrolled in any courses</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Attendance Records</h5>
+                    <a href="/attendance/edit/{{ student_id }}" class="btn btn-sm btn-primary">Edit Attendance</a>
+                </div>
+                <div class="card-body">
+                    {% if attendance %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Course</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for date_key, status in attendance.items() %}
+                                        <tr>
+                                            {% if '_' in date_key %}
+                                                {% set date, course_id = date_key.split('_') %}
+                                                <td>{{ date }}</td>
+                                                <td>{{ courses[course_id].name if course_id in courses else 'Unknown' }}</td>
+                                            {% else %}
+                                                <td>{{ date_key }}</td>
+                                                <td>All</td>
+                                            {% endif %}
+                                            <td>
+                                                <span class="badge bg-{{ 'success' if status == 'Present' else 'danger' if status == 'Absent' else 'warning' if status == 'Late' else 'secondary' }}">
+                                                    {{ status }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No attendance records found</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+        

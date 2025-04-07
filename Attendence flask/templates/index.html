@@ -1,0 +1,56 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <h1 class="mb-4">Attendance Management Dashboard</h1>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Students</h5>
+                    <p class="card-text display-4">{{ student_count }}</p>
+                    <a href="/students" class="btn btn-primary">View Students</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Courses</h5>
+                    <p class="card-text display-4">{{ course_count }}</p>
+                    <a href="/courses" class="btn btn-primary">View Courses</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-center mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/attendance" class="btn btn-success">Mark Attendance</a>
+                        <a href="/summary" class="btn btn-info">View Summary</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title">About This System</h5>
+        </div>
+        <div class="card-body">
+            <p>The Enhanced Attendance Management System allows you to:</p>
+            <ul>
+                <li>Manage students and courses</li>
+                <li>Track attendance with multiple status options</li>
+                <li>Generate attendance reports</li>
+                <li>Export data to CSV format</li>
+            </ul>
+            <p>Use the navigation menu on the left to access different features.</p>
+        </div>
+    </div>
+{% endblock %}
+        

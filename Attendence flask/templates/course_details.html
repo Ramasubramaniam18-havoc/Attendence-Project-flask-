@@ -1,0 +1,63 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Course Details: {{ course.name }}</h1>
+        <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Course Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>ID:</strong> {{ course_id }}</p>
+                    <p><strong>Name:</strong> {{ course.name }}</p>
+                    <p><strong>Instructor:</strong> {{ course.instructor if course.instructor else 'Not assigned' }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Enrolled Students</h5>
+                    <a href="/enroll" class="btn btn-sm btn-primary">Enroll Student</a>
+                </div>
+                <div class="card-body">
+                    {% if enrolled_students %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in enrolled_students %}
+                                        <tr>
+                                            <td>{{ student.id }}</td>
+                                            <td>{{ student.name }}</td>
+                                            <td>
+                                                <a href="/student/{{ student.id }}" class="btn btn-sm btn-info">View</a>
+                                                <a href="/unenroll/{{ student.id }}/{{ course_id }}" class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('Are you sure you want to unenroll this student?')">Unenroll</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No students enrolled in this course</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+        
